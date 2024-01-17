@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 // Goals
@@ -12,35 +11,37 @@ import (
 // 4. Output EBT, profit and ratio
 
 func main() {
-	// Declare data containers
-	//revenue := 2000.0
-	var revenue float64
-	//expenses := 1000.0
-	var expenses float64
-	//taxRate := .24
-	var taxRate float64
 
 	// Ask for revenue, expenses and tax rate
-	fmt.Print("Revenue: ")
-	fmt.Scan(&revenue)
-	fmt.Print("Expenses: ")
-	fmt.Scan(&expenses)
-	fmt.Print("Tax Rate: ")
-	fmt.Scan(&taxRate)
+	revenue := getUserInput("Revenue: ")
+	expenses := getUserInput("Expenses: ")
+	taxRate := getUserInput("Tax Rate: ")
 
+	earningsBeforeTax, profit, expenseRatio := calculateFinancials(revenue, expenses, taxRate)
+
+	fmt.Printf("Earnings before tax: %.2f\n", earningsBeforeTax)
+	fmt.Printf("Profit: %.2f\n", profit)
+	fmt.Printf("Expense Ratio: %.2f", expenseRatio)
+}
+
+func getUserInput(infoText string) float64 {
+	var userInput float64
+
+	fmt.Print(infoText)
+	_, err := fmt.Scan(&userInput)
+	if err != nil {
+		return 0
+	}
+
+	return userInput
+}
+
+func calculateFinancials(revenue, expenses, taxRate float64) (float64, float64, float64) {
 	// Calculate earnings before tax (EBT) and earnings after tax (profit)
 	earningsBeforeTax := revenue - expenses
 	profit := earningsBeforeTax * (1 - taxRate/100)
 
 	// Calculate ratio (EBT / Profit)
 	expenseRatio := earningsBeforeTax / profit
-
-	fmt.Print("Earnings before tax: ")
-	fmt.Println(earningsBeforeTax)
-
-	fmt.Print("Profit: ")
-	fmt.Println(profit)
-
-	fmt.Print("Expense ratio: ")
-	fmt.Println(math.Round(expenseRatio*100) / 100) // rounds to nearest two decimals
+	return earningsBeforeTax, profit, expenseRatio
 }
